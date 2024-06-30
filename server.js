@@ -1,4 +1,11 @@
-import { Configuration, OpenAIApi } from "openai";
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { Configuration, OpenAIApi } = require('openai');
+require('dotenv').config();
+
+const app = express();
+const port = process.env.PORT || 5000;
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -6,11 +13,14 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-export default async function handler(req, res) {
+app.use(cors());
+app.use(bodyParser.json());
+
+app.post('/api/process-description', async (req, res) => {
   const { description } = req.body;
 
   if (!description) {
-    return res.status(400).json({ error: "Description is required" });
+    return res.status(400).json({ error: 'Description is required' });
   }
 
   try {
@@ -28,7 +38,7 @@ export default async function handler(req, res) {
     `;
 
     const completion = await openai.createCompletion({
-      model: "text-davinci-003",
+      model: 'text-davinci-003',
       prompt,
       max_tokens: 150,
     });
@@ -36,7 +46,11 @@ export default async function handler(req, res) {
     const parsedData = JSON.parse(completion.data.choices[0].text.trim());
     res.status(200).json(parsedData);
   } catch (error) {
-    console.error("Error processing description:", error);
-    res.status(500).json({ error: "Failed to process description" });
+    console.error('Error processing description:', error);
+    res.status(500).json({ error: 'Failed to process description' });
   }
-}
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port: ${port}`);
+});
