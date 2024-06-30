@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
-
 import Joi from 'joi';
 
 const schema = Joi.object({
@@ -36,16 +34,16 @@ const Index = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center space-y-4">
-      <h1 className="text-3xl text-center">{t('welcome')}</h1>
-      <p className="text-center">{t('description')}</p>
+    <div className="h-screen w-screen flex flex-col items-center justify-center space-y-4 bg-cover bg-center p-4" style={{ backgroundImage: "url('/images/background.jpg')" }}>
+      <h1 className="text-4xl font-bold text-white text-center">{t('welcome')}</h1>
+      <p className="text-lg text-white text-center">{t('description')}</p>
       <Input 
         placeholder="Enter your web app description..." 
-        className="w-1/2" 
+        className="w-full max-w-md p-2 rounded-lg" 
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <Button onClick={handleGenerate}>{t('generate')}</Button>
+      <Button onClick={handleGenerate} className="bg-blue-500 text-white p-2 rounded-lg">{t('generate')}</Button>
     </div>
   );
 };
