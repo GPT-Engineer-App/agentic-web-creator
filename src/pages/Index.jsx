@@ -5,12 +5,25 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
+import Joi from 'joi';
+
+const schema = Joi.object({
+  description: Joi.string().min(10).max(1000).required(),
+  template: Joi.string().valid('basic', 'ecommerce', 'blog').required()
+});
+
 const Index = () => {
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
 
   const handleGenerate = async () => {
     try {
+      const { error, value } = schema.validate({ description, template: 'basic' });
+      if (error) {
+        console.error("Validation error:", error.details[0].message);
+        return;
+      }
+
       const response = await axios.post("/api/process-description", { description });
       const parsedData = response.data;
       console.log(parsedData); // For debugging purposes
