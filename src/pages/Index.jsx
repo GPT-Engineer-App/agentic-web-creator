@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { generateCode, createZipFile } from '../utils/codeGenerator';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,20 @@ const Index = () => {
       const response = await axios.post("/api/process-description", { description });
       const parsedData = response.data;
       console.log(parsedData); // For debugging purposes
+
+      const generatedCode = await generateCode(parsedData);
+      const zipFile = await createZipFile(generatedCode);
+
+      // Trigger download of the ZIP file
+      const blob = new Blob([zipFile], { type: 'application/zip' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'webapp.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
       navigate("/preview", { state: { parsedData } });
     } catch (error) {
       console.error("Error processing description:", error);

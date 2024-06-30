@@ -22,7 +22,10 @@ export default async function handler(req, res) {
       Output the information in the following JSON format:
       {
         "features": [],
-        "design": {},
+        "design": {
+          "backgroundColor": "",
+          "textColor": ""
+        },
         "technicalRequirements": []
       }
     `;
