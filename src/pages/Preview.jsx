@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import DOMPurify from 'dompurify';
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
 import PreviewIframe from "../components/PreviewIframe";
@@ -7,6 +8,7 @@ import PreviewIframe from "../components/PreviewIframe";
 const Preview = () => {
   const navigate = useNavigate();
   const [htmlContent, setHtmlContent] = useState("");
+  const [rating, setRating] = useState(0);
 
   const handleDownload = async () => {
     try {
@@ -23,10 +25,25 @@ const Preview = () => {
     }
   };
 
+  const handleRatingChange = (event) => {
+    setRating(event.target.value);
+  };
+
+  const handleRatingSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.post("/api/submit-rating", { rating });
+      alert("Rating submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+    }
+  };
+
   useEffect(() => {
     const previewSocket = new WebSocket("ws://your-server/preview");
     previewSocket.onmessage = (event) => {
-      setHtmlContent(JSON.parse(event.data));
+      const sanitizedHtmlContent = DOMPurify.sanitize(JSON.parse(event.data));
+      setHtmlContent(sanitizedHtmlContent);
     };
 
     return () => {
@@ -42,6 +59,14 @@ const Preview = () => {
         <PreviewIframe htmlContent={htmlContent} />
       </div>
       <Button onClick={handleDownload}>Download Codebase</Button>
+      <form id="feedback-form" onSubmit={handleRatingSubmit}>
+        <input type="radio" name="rating" value="1" onChange={handleRatingChange} /> 1
+        <input type="radio" name="rating" value="2" onChange={handleRatingChange} /> 2
+        <input type="radio" name="rating" value="3" onChange={handleRatingChange} /> 3
+        <input type="radio" name="rating" value="4" onChange={handleRatingChange} /> 4
+        <input type="radio" name="rating" value="5" onChange={handleRatingChange} /> 5
+        <button type="submit">Submit Rating</button>
+      </form>
     </div>
   );
 };
