@@ -1,25 +1,18 @@
-import { fileURLToPath, URL } from "url";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
 
-// https://vitejs.dev/config/
+dotenv.config();
+
 export default defineConfig({
-  server: {
-    host: "::",
-    port: "8080",
-  },
   plugins: [react()],
-  resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: fileURLToPath(new URL("./src", import.meta.url)),
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      {
-        find: "lib",
-        replacement: resolve(__dirname, "lib"),
-      },
-    ],
+    },
   },
 });
