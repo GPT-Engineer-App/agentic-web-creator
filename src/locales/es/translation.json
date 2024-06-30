@@ -1,0 +1,10 @@
+{
+  "welcome": "Bienvenido al Generador de Aplicaciones Web",
+  "description": "Describe tu idea de aplicación web a continuación:",
+  "generate": "Generar",
+  "preview": "Vista previa",
+  "download": "Descargar código",
+  "rating": "Enviar calificación",
+  "interactivePreview": "Vista previa interactiva",
+  "previewDescription": "Aquí tienes una vista previa de tu aplicación web generada:"
+}
