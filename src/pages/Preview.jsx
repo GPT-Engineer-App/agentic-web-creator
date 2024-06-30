@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
 import PreviewIframe from "../components/PreviewIframe";
@@ -7,9 +8,19 @@ const Preview = () => {
   const navigate = useNavigate();
   const [htmlContent, setHtmlContent] = useState("");
 
-  const handleDownload = () => {
-    // Placeholder for the code export logic
-    alert("Codebase downloaded!");
+  const handleDownload = async () => {
+    try {
+      const response = await axios.get("/download", { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'webapp.zip');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading codebase:", error);
+    }
   };
 
   useEffect(() => {
