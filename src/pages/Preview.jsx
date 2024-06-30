@@ -54,20 +54,22 @@ const Preview = () => {
   }, []);
 
   return (
-    <div className="h-screen w-screen flex flex-col items-center justify-center space-y-4">
-      <h1 className="text-3xl text-center">{t('interactivePreview')}</h1>
-      <p className="text-center">{t('previewDescription')}</p>
+    <div className="h-screen w-screen flex flex-col items-center justify-center space-y-4 bg-cover bg-center p-4" style={{ backgroundImage: "url('/images/background.jpg')" }}>
+      <h1 className="text-4xl font-bold text-white text-center">{t('interactivePreview')}</h1>
+      <p className="text-lg text-white text-center">{t('previewDescription')}</p>
       <div className="w-3/4 h-3/4 bg-gray-100 border rounded-lg p-4">
         <PreviewIframe htmlContent={htmlContent} />
       </div>
-      <Button onClick={handleDownload}>{t('download')}</Button>
-      <form id="feedback-form" onSubmit={handleRatingSubmit}>
-        <input type="radio" name="rating" value="1" onChange={handleRatingChange} /> 1
-        <input type="radio" name="rating" value="2" onChange={handleRatingChange} /> 2
-        <input type="radio" name="rating" value="3" onChange={handleRatingChange} /> 3
-        <input type="radio" name="rating" value="4" onChange={handleRatingChange} /> 4
-        <input type="radio" name="rating" value="5" onChange={handleRatingChange} /> 5
-        <button type="submit">{t('rating')}</button>
+      <Button onClick={handleDownload} className="bg-blue-500 text-white p-2 rounded-lg">{t('download')}</Button>
+      <form id="feedback-form" onSubmit={handleRatingSubmit} className="flex flex-col items-center space-y-2">
+        <div className="flex space-x-2">
+          <input type="radio" name="rating" value="1" onChange={handleRatingChange} /> 1
+          <input type="radio" name="rating" value="2" onChange={handleRatingChange} /> 2
+          <input type="radio" name="rating" value="3" onChange={handleRatingChange} /> 3
+          <input type="radio" name="rating" value="4" onChange={handleRatingChange} /> 4
+          <input type="radio" name="rating" value="5" onChange={handleRatingChange} /> 5
+        </div>
+        <button type="submit" className="bg-green-500 text-white p-2 rounded-lg">{t('rating')}</button>
       </form>
     </div>
   );
